@@ -1,30 +1,38 @@
 package ru.kpfu.khalikov.shortLinks.service
 
-import org.graalvm.compiler.lir.CompositeValue
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.lang.UnsupportedOperationException
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 
 @Component
 class DefaultKeyMapperService : KeyMapperService {
 
-    private val map: MutableMap<String, String> = ConcurrentHashMap()
+    @Autowired
+    lateinit var convert: KeyConverterService
 
 
-    override fun add(key: String, link: String): KeyMapperService.Add {
-        if (map.containsKey(key)){
-            return  KeyMapperService.Add.AlreadyExist(key)
-        }
-        else{
-            map.put(key, link)
-            return KeyMapperService.Add.Success(key, link)
-        }
+    val sequenc = AtomicLong (10000000L)
+
+    override fun add(link: String): String {
+        val id = sequenc.getAndIncrement()
+        val key = convert.idToKey(id)
+        map.put(id, link)
+        return key
     }
 
-    override fun getLink(key: String) = if (map.contains(key)) {
-            KeyMapperService.Get.Link(map.get(key)!!)
+    private val map: MutableMap<Long, String> = ConcurrentHashMap()
+
+
+    override fun getLink(key: String):KeyMapperService.Get{
+        val id = convert.keyToId(key)
+        val result = map[id]
+        if (result == null){
+            return KeyMapperService.Get.NotFound(key)
+        }
         else{
-            KeyMapperService.Get.NotFound(key)
+            return KeyMapperService.Get.Link(result)
         }
     }
 
