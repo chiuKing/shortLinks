@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <links id="100000" text="https://vk.com"/>
+    <links id="100001" text="https://google.com"/>
+    <links id="100002" text="https://youtube.com"/>
+
+</dataset>
