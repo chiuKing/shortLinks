@@ -9,8 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 import javax.transaction.Transactional
 
-@Component
-class DefaultKeyMapperService : KeyMapperService {
+open class DefaultKeyMapperService : KeyMapperService {
 
     @Autowired
     lateinit var converter: KeyConverterService
