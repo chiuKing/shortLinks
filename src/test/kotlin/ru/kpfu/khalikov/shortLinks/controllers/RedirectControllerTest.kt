@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.stereotype.Controller
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.client.match.MockRestRequestMatchers.header
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MockMvcBuilder
@@ -20,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext
 import ru.kpfu.khalikov.shortLinks.ShortLinksApplication
 import ru.kpfu.khalikov.shortLinks.service.KeyMapperService
 
+@TestPropertySource(locations = arrayOf("classpath:repositories-test.properties"))
 @RunWith(SpringJUnit4ClassRunner::class)
 @SpringBootTest(classes = arrayOf(ShortLinksApplication::class))
 @WebAppConfiguration
@@ -35,7 +38,6 @@ class RedirectControllerTest{
     @Autowired
     @InjectMocks
     lateinit var controller: RedirectController
-
     @Before
     fun init(){
         MockitoAnnotations.initMocks(this)
